@@ -1,4 +1,4 @@
 import src.snaky as snaky
 
 if __name__ == "__main__":
-    snaky.main()
+    snaky.main("config.json")
