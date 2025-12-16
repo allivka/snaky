@@ -3,5 +3,8 @@
   "icon_path": "resources/textures/apple.png",
   "map_chunk_path" : "resources/textures/field.png",
   "map_size_x" : 6,
-  "map_size_y": 6
+  "map_size_y": 6,
+  "apple_path": "resources/textures/apple.png",
+  "apple_centre_shift_x": 0.0,
+  "apple_centre_shift_y": -0.1
 }
