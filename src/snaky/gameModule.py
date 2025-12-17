@@ -3,11 +3,6 @@ from .appleModule import *
 
 class Game:
 
-    config : Config
-    surface: pygame.Surface
-    field: Map
-    apple: Apple
-
     def __init__(self, config: Config) -> None:
         pygame.init()
 

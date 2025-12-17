@@ -3,11 +3,6 @@ from .general import *
 
 class Map:
 
-    surface: pygame.Surface
-    size: tuple[int, int]
-    chuck_size: tuple[int, int]
-    screen_size: tuple[int, int]
-
     def __init__(self, size: tuple[int, int], chunk: pygame.Surface) -> None:
 
         self.size = size

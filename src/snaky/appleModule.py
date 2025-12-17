@@ -1,10 +1,6 @@
 from .general import *
 
 class Apple:
-    surface: pygame.Surface
-    pos: tuple[int, int]
-    chunk_size: tuple[int, int]
-    centre_shift: tuple[float, float]
 
     def __init__(self, surface: pygame.Surface, pos: tuple[int, int], chunk_size: tuple[int, int], centre_shift: tuple[float, float]) -> None:
         self.surface = surface
