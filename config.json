@@ -1,10 +1,20 @@
 {
   "tick_rate": 60,
   "icon_path": "resources/textures/apple.png",
+
   "map_chunk_path" : "resources/textures/field.png",
   "map_size_x" : 6,
   "map_size_y": 6,
+
   "apple_path": "resources/textures/apple.png",
   "apple_centre_shift_x": 0.0,
-  "apple_centre_shift_y": -0.1
+  "apple_centre_shift_y": -0.1,
+
+  "snake_head_path": "resources/textures/snake_head.png",
+  "snake_tail_path": "resources/textures/snake_tail.png",
+  "snake_body_straight_path": "resources/textures/snake_body_straight.png",
+  "snake_body_blended_path": "resources/textures/snake_body_blended.png",
+
+  "snake_centre_shift_x": 0.0,
+  "snake_centre_shift_y": 0.0
 }

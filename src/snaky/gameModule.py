@@ -1,4 +1,5 @@
 from .gameMap import *
+import snake
 
 class Game:
 
@@ -22,6 +23,8 @@ class Game:
                            chunk_size=self.field.chunk_size,
                            centre_shift=(config["apple_centre_shift_x"], config["apple_centre_shift_y"])
                            )
+
+        self.snake = snake.Snake()
 
 
 
