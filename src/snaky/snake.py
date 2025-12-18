@@ -14,9 +14,7 @@ class TileType(Enum):
 
 type BodySprites = dict[TileType, pygame.Surface]
 
-def angle_to_vec(angle: int) -> Vec2:
-    rad = radians(angle)
-    return Vec2(cos(rad), sin(rad))
+
 
 class BodyTile:
     def __init__(
@@ -84,10 +82,31 @@ class Snake:
     def forward(self, distance: int) -> None:
         speed: Vec2 = angle_to_vec(self.body[-1].direction) * distance
 
-        self.body[-1].entity.pos += speed
+        print("Forward")
 
         for i in range(len(self.body) - 2, -1, -1):
-            pass
+            d: int = self.body[i - 1].direction
+
+            self.body[i].entity.pos += angle_to_vec(d) * distance
+
+            t = self.body[i].direction
+            self.body[i].direction = self.body[i - 1].direction
+
+            if self.body[i].tile_type in (TileType.head, TileType.tail):
+                continue
+
+            diff = fix_degrees(d) - fix_degrees(t)
+
+            if diff == 0:
+                self.body[i].tile_type = TileType.straight
+            elif diff > 0:
+                self.body[i].tile_type = TileType.right
+            elif diff < 0:
+                self.body[i].tile_type = TileType.left
+
+
+
+        self.body[-1].entity.pos += speed
 
 
 

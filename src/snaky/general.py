@@ -3,6 +3,13 @@ from typing import TypedDict
 from pygame.math import Vector2 as Vec2
 from math import radians, sin, cos
 
+def angle_to_vec(angle: int) -> Vec2:
+    rad = radians(angle)
+    return Vec2(cos(rad), sin(rad))
+
+def fix_degrees(angle: int) -> int:
+    return (360 + (angle % 360)) % 360
+
 class Config(TypedDict):
     tick_rate: int
     icon_path: str

@@ -36,7 +36,7 @@ class Game:
         self.snake = snake.Snake(
             sprites=self.body_sprites,
             chunk_size=self.field.chunk_size,
-            pos=Vec2(3, 3),
+            pos=Vec2(2, 2),
             centre_shift = (config["snake_centre_shift_x"], config["snake_centre_shift_y"]),
             direction=0,
             body_length=3
@@ -49,9 +49,14 @@ class Game:
     def play(self) -> None:
         clock = pygame.time.Clock()
 
+        start: int = pygame.time.get_ticks()
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: exit()
+
+            if pygame.time.get_ticks() - start >= 1000:
+                self.snake.forward(1)
+                start = pygame.time.get_ticks()
 
             self.surface.blit(self.field.surface, (0,0))
             self.surface.blit(self.apple.surface, self.apple.get_screen_pos())
@@ -59,4 +64,5 @@ class Game:
 
             pygame.display.update()
             clock.tick(self.config["tick_rate"])
+
 
