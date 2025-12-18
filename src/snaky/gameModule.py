@@ -43,6 +43,8 @@ class Game:
         )
 
 
+    def __str__(self) -> str:
+        return f"Snake game:\n\nconfiguration={self.config}\nfield={self.field}\napple={self.apple}\nsnake={self.snake}\nsurface={self.surface}\nbody_sprites={self.body_sprites}"
 
     def play(self) -> None:
         clock = pygame.time.Clock()

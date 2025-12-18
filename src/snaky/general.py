@@ -31,6 +31,9 @@ class Entity:
         self.chunk_size = chunk_size
         self.centre_shift = centre_shift
 
+    def __str__(self) -> str:
+        return f"pos={self.pos}, chunk_size={self.chunk_size}, centre_shift={self.centre_shift}\n\tsurface={self.surface}"
+
     def get_screen_pos(self, shift: Vec2 = (0, 0)) -> Vec2:
         return Vec2(self.pos[0] * self.chunk_size[0] + (self.chunk_size[0] // 2 - self.surface.get_size()[0] // 2) + int(self.chunk_size[0] * self.centre_shift[0]) + shift[0],
                 self.pos[1] * self.chunk_size[1] + (self.chunk_size[1] // 2 - self.surface.get_size()[1] // 2) + int(self.chunk_size[1] * self.centre_shift[1]) + shift[1]
