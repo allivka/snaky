@@ -12,19 +12,33 @@ class Game:
         self.config = config
 
         chunk : pygame.Surface = pygame.image.load(config["map_chunk_path"])
-        self.field = Map((config["map_size_x"], config["map_size_y"]), chunk)
+        self.field = Map(Vec2(config["map_size_x"], config["map_size_y"]), chunk)
 
         self.surface = pygame.display.set_mode(self.field.get_screen_size())
         pygame.display.set_caption("Snaky")
         pygame.display.set_icon(pygame.image.load(config["icon_path"]))
 
         self.apple = Entity(surface=pygame.image.load(config["apple_path"]),
-                           pos=(self.field.size[0] // 2, self.field.size[1] // 2),
+                           pos=Vec2(self.field.size[0] // 2, self.field.size[1] // 2),
                            chunk_size=self.field.chunk_size,
                            centre_shift=(config["apple_centre_shift_x"], config["apple_centre_shift_y"])
                            )
 
-        self.snake = snake.Snake()
+        self.body_sprites = {snake.TileType.head: pygame.image.load(config["snake_head_path"]),
+                             snake.TileType.tail: pygame.image.load(config["snake_tail_path"]),
+                             snake.TileType.straight: pygame.image.load(config["snake_body_straight_path"]),
+                             snake.TileType.right: pygame.image.load(config["snake_body_blended_right_path"]),
+                             snake.TileType.left: pygame.transform.flip(pygame.image.load(config["snake_body_blended_right_path"]), flip_x=True, flip_y=False)
+                             }
+
+        self.snake = snake.Snake(
+            sprites=self.body_sprites,
+            chunk_size=self.field.chunk_size,
+            pos=Vec2(3, 3),
+            centre_shift = (config["apple_centre_shift_x"], config["apple_centre_shift_y"]),
+            direction=0,
+            body_length=3
+        )
 
 
 
@@ -37,6 +51,7 @@ class Game:
 
             self.surface.blit(self.field.surface, (0,0))
             self.surface.blit(self.apple.surface, self.apple.get_screen_pos())
+            self.snake.draw(self.surface)
 
             pygame.display.update()
             clock.tick(self.config["tick_rate"])

@@ -32,9 +32,9 @@ class BodyTile:
         self.direction = direction
 
     def update(self, t: Optional[TileType] = None) -> None:
-
         if not t is None: self.tile_type = t
         self.entity.surface = self.sprites[self.tile_type]
+        self.entity.surface = pygame.transform.rotate(self.entity.surface, self.direction + 90)
 
     def draw(self, sf: pygame.Surface, shift: Vec2 = (0, 0)) -> None:
         self.update()
@@ -45,8 +45,6 @@ type Body = list[BodyTile]
 
 
 class Snake:
-    """The 0 angle is considered while looking right so alongside axis angle, it's positive to the right and negative to the left"""
-
     def __init__(self,
                  sprites: BodySprites,
                  chunk_size: Vec2,
@@ -59,18 +57,22 @@ class Snake:
         if body_length < 3: body_length = 3
 
         self.sprites = sprites
-        self.direction = direction
         self.body = [BodyTile(sprites, chunk_size, pos, centre_shift, TileType.tail, direction),
                      *[BodyTile(sprites, chunk_size, pos - angle_to_vec(direction) * (i + 1), centre_shift, TileType.tail, direction) for i in range(0, body_length - 2)],
-                     BodyTile(sprites, chunk_size, pos - angle_to_vec(direction) * (body_length - 1), centre_shift, TileType.tail, direction)
+                     BodyTile(sprites, chunk_size, pos - angle_to_vec(direction) * (body_length - 1), centre_shift, TileType.head, direction)
                      ]
+
+
+    def update_view(self) -> None:
+        for tile in self.body:
+            tile.update()
 
     def draw(self, sf: pygame.Surface, shift: Vec2 = (0, 0)) -> None:
         for tile in self.body:
             tile.entity.draw(sf, shift)
 
     def forward(self, distance: int) -> None:
-        speed: Vec2 = angle_to_vec(self.direction) * distance
+        speed: Vec2 = angle_to_vec(self.body[-1].direction) * distance
 
         self.body[-1].entity.pos += speed
 

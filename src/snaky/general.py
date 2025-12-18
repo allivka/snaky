@@ -18,7 +18,7 @@ class Config(TypedDict):
     snake_head_path: str
     snake_tail_path: str
     snake_body_straight_path: str
-    snake_body_blended_path: str
+    snake_body_blended_right_path: str
 
     snake_centre_shift_x: float
     snake_centre_shift_y: float
@@ -32,7 +32,7 @@ class Entity:
         self.centre_shift = centre_shift
 
     def get_screen_pos(self, shift: Vec2 = (0, 0)) -> Vec2:
-        return (self.pos[0] * self.chunk_size[0] + (self.chunk_size[0] // 2 - self.surface.get_size()[0] // 2) + int(self.chunk_size[0] * self.centre_shift[0]) + shift[0],
+        return Vec2(self.pos[0] * self.chunk_size[0] + (self.chunk_size[0] // 2 - self.surface.get_size()[0] // 2) + int(self.chunk_size[0] * self.centre_shift[0]) + shift[0],
                 self.pos[1] * self.chunk_size[1] + (self.chunk_size[1] // 2 - self.surface.get_size()[1] // 2) + int(self.chunk_size[1] * self.centre_shift[1]) + shift[1]
                 )
 

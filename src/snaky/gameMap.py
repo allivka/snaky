@@ -5,9 +5,9 @@ class Map:
 
     def __init__(self, size: Vec2, chunk: pygame.Surface) -> None:
 
-        self.size = size
+        self.size : Vec2 = size
 
-        self.chunk_size : Vec2 = chunk.get_size()
+        self.chunk_size : Vec2 = Vec2(chunk.get_size())
         screen_size = (self.chunk_size[0] * size[0], self.chunk_size[1] * size[1])
         self.surface = pygame.Surface(screen_size)
 
@@ -16,4 +16,4 @@ class Map:
                 self.surface.blit(chunk, (self.chunk_size[0] * i, self.chunk_size[1] * j))
 
     def get_screen_size(self) -> Vec2:
-        return self.chunk_size[0] * self.size[0], self.chunk_size[1] * self.size[1]
+        return Vec2(self.chunk_size[0] * self.size[0], self.chunk_size[1] * self.size[1])
