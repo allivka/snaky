@@ -13,7 +13,7 @@ type BodySprites = dict[TileType, pygame.Surface]
 
 def angle_to_vec(angle: int) -> Vec2:
     rad = radians(angle)
-    speed: Vec2 = Vec2(cos(rad), sin(rad))
+    return Vec2(cos(rad), sin(rad))
 
 class BodyTile:
     def __init__(self,

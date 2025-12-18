@@ -1,5 +1,5 @@
 from .gameMap import *
-import snake
+import snaky.snake as snake
 
 class Game:
 
@@ -18,18 +18,20 @@ class Game:
         pygame.display.set_caption("Snaky")
         pygame.display.set_icon(pygame.image.load(config["icon_path"]))
 
-        self.apple = Entity(surface=pygame.image.load(config["apple_path"]),
-                           pos=Vec2(self.field.size[0] // 2, self.field.size[1] // 2),
-                           chunk_size=self.field.chunk_size,
-                           centre_shift=(config["apple_centre_shift_x"], config["apple_centre_shift_y"])
-                           )
+        self.apple = Entity(
+            surface=pygame.image.load(config["apple_path"]),
+            pos=Vec2(self.field.size[0] // 2, self.field.size[1] // 2),
+            chunk_size=self.field.chunk_size,
+            centre_shift=(config["apple_centre_shift_x"], config["apple_centre_shift_y"])
+       )
 
-        self.body_sprites = {snake.TileType.head: pygame.image.load(config["snake_head_path"]),
-                             snake.TileType.tail: pygame.image.load(config["snake_tail_path"]),
-                             snake.TileType.straight: pygame.image.load(config["snake_body_straight_path"]),
-                             snake.TileType.right: pygame.image.load(config["snake_body_blended_right_path"]),
-                             snake.TileType.left: pygame.transform.flip(pygame.image.load(config["snake_body_blended_right_path"]), flip_x=True, flip_y=False)
-                             }
+        self.body_sprites = {
+            snake.TileType.head: pygame.image.load(config["snake_head_path"]),
+            snake.TileType.tail: pygame.image.load(config["snake_tail_path"]),
+            snake.TileType.straight: pygame.image.load(config["snake_body_straight_path"]),
+            snake.TileType.right: pygame.image.load(config["snake_body_blended_right_path"]),
+            snake.TileType.left: pygame.transform.flip(pygame.image.load(config["snake_body_blended_right_path"]), flip_x=True, flip_y=False)
+        }
 
         self.snake = snake.Snake(
             sprites=self.body_sprites,
