@@ -37,7 +37,7 @@ class Game:
             sprites=self.body_sprites,
             chunk_size=self.field.chunk_size,
             pos=Vec2(3, 3),
-            centre_shift = (config["apple_centre_shift_x"], config["apple_centre_shift_y"]),
+            centre_shift = (config["snake_centre_shift_x"], config["snake_centre_shift_y"]),
             direction=0,
             body_length=3
         )

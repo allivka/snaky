@@ -8,7 +8,7 @@
 
   "apple_path": "resources/textures/apple.png",
   "apple_centre_shift_x": 0.0,
-  "apple_centre_shift_y": -0.1,
+  "apple_centre_shift_y": -0.0,
 
   "snake_head_path": "resources/textures/snake_head.png",
   "snake_tail_path": "resources/textures/snake_tail.png",
@@ -16,5 +16,5 @@
   "snake_body_blended_right_path": "resources/textures/snake_body_blended_right.png",
 
   "snake_centre_shift_x": 0.0,
-  "snake_centre_shift_y": 0.0
+  "snake_centre_shift_y": -0.0
 }

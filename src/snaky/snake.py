@@ -40,7 +40,7 @@ class BodyTile:
     def update(self, t: Optional[TileType] = None) -> None:
         if not t is None: self.tile_type = t
         self.entity.surface = self.sprites[self.tile_type]
-        self.entity.surface = pygame.transform.rotate(self.entity.surface, self.direction + 90)
+        self.entity.surface = pygame.transform.rotate(self.entity.surface, -self.direction - 90)
 
     def draw(self, sf: pygame.Surface, shift: Vec2 = (0, 0)) -> None:
         self.update()
@@ -65,9 +65,9 @@ class Snake:
 
         self.sprites = sprites
         self.body = [
-            BodyTile(sprites, chunk_size, pos, centre_shift, TileType.tail, direction),
+            BodyTile(sprites, chunk_size, pos - angle_to_vec(direction) * (body_length - 1), centre_shift, TileType.tail, direction),
             *[BodyTile(sprites, chunk_size, pos - angle_to_vec(direction) * (i + 1), centre_shift, TileType.straight, direction) for i in range(0, body_length - 2)],
-            BodyTile(sprites, chunk_size, pos - angle_to_vec(direction) * (body_length - 1), centre_shift, TileType.head, direction)
+            BodyTile(sprites, chunk_size, pos, centre_shift, TileType.head, direction)
             ]
 
         self.update_view()
