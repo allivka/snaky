@@ -30,6 +30,10 @@ class Config(TypedDict):
     snake_centre_shift_x: float
     snake_centre_shift_y: float
 
+    control_time_gap: int
+
+    move_update_gap: int
+
 class Entity:
 
     def __init__(self, surface: pygame.Surface, chunk_size: Vec2, pos: Vec2 = (0, 0), centre_shift: tuple[float, float] = (0.0, 0.0)) -> None:

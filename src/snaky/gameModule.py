@@ -1,3 +1,7 @@
+from argparse import ArgumentError
+
+import pygame
+
 from .gameMap import *
 import snaky.snake as snake
 
@@ -42,21 +46,69 @@ class Game:
             body_length=3
         )
 
+        self.last_control_time = pygame.time.get_ticks()
+
 
     def __str__(self) -> str:
         return f"Snake game:\n\nconfiguration={self.config}\nfield={self.field}\napple={self.apple}\nsnake={self.snake}\nsurface={self.surface}\nbody_sprites={self.body_sprites}"
 
+    def quit(self) -> None:
+        exit()
+
+    def control_process(self, key: int) -> None:
+
+        if pygame.time.get_ticks() - self.last_control_time >= self.config["control_time_gap"]: return
+
+        self.snake.direction = fix_degrees(self.snake.direction)
+
+        dirs: dict[int, int] = {
+            pygame.K_w: -90,
+            pygame.K_a: 180,
+            pygame.K_s: 90,
+            pygame.K_d: 0,
+        }
+
+        if key not in dirs: return
+
+        if abs(fix_degrees(self.snake.direction) - dirs[key]) == 180: return
+
+        self.snake.direction = dirs[key]
+
+        self.last_control_time = pygame.time.get_ticks()
+
+
+    def keydown_process(self, event: pygame.event.Event) -> None:
+        if event.type != pygame.KEYDOWN:
+            raise RuntimeError(None, "event passed for keydown processing doesn't have such type")
+
+        self.control_process(event.key)
+
+
+
+    def update_state(self, events: list[pygame.event.Event]) -> None:
+        for event in events:
+            match event.type:
+                case pygame.QUIT: self.quit()
+
+                case pygame.KEYDOWN:
+                    self.keydown_process(event)
+
+
+
+
     def play(self) -> None:
         clock = pygame.time.Clock()
 
-        start: int = pygame.time.get_ticks()
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT: exit()
+        last_forward_time: int = pygame.time.get_ticks()
 
-            if pygame.time.get_ticks() - start >= 1000:
-                self.snake.forward(1)
-                start = pygame.time.get_ticks()
+        while True:
+            self.update_state(pygame.event.get())
+
+            if pygame.time.get_ticks() - last_forward_time > self.config["move_update_gap"]:
+                self.snake.forward()
+                last_forward_time = pygame.time.get_ticks()
+
+            self.snake.update()
 
             self.surface.blit(self.field.surface, (0,0))
             self.surface.blit(self.apple.surface, self.apple.get_screen_pos())

@@ -56,7 +56,8 @@ class Snake:
             pos: Vec2 = (0, 0),
             centre_shift: tuple[float, float] = (0.0, 0.0),
             direction: int = 0,
-            body_length: int = 3
+            body_length: int = 3,
+            speed: int = 1
             ) -> None:
 
         if body_length < 3: body_length = 3
@@ -67,11 +68,21 @@ class Snake:
             *[BodyTile(sprites, chunk_size, pos - angle_to_vec(direction) * (i + 1), centre_shift, TileType.straight, direction) for i in range(0, body_length - 2)],
             BodyTile(sprites, chunk_size, pos, centre_shift, TileType.head, direction)
             ]
+        self.speed = speed
 
-        self.update_view()
+        self.update()
 
 
-    def update_view(self) -> None:
+    @property
+    def direction(self) -> int:
+        return self.body[-1].direction
+
+    @direction.setter
+    def direction(self, value: int) -> None:
+        self.body[-1].direction = value
+
+    def update(self) -> None:
+        self.direction = fix_degrees(self.direction)
         for tile in self.body:
             tile.update()
 
@@ -79,18 +90,16 @@ class Snake:
         for tile in self.body:
             tile.entity.draw(sf, shift)
 
-    def forward(self, distance: int) -> None:
-        speed: Vec2 = angle_to_vec(self.body[-1].direction) * distance
+    def forward(self) -> None:
+        speed: Vec2 = angle_to_vec(self.direction) * self.speed
 
-        print("Forward")
+        for i in range(len(self.body) - 1):
+            d: int = self.body[i + 1].direction
 
-        for i in range(len(self.body) - 2, -1, -1):
-            d: int = self.body[i - 1].direction
-
-            self.body[i].entity.pos += angle_to_vec(d) * distance
+            self.body[i].entity.pos += angle_to_vec(d) * self.speed
 
             t = self.body[i].direction
-            self.body[i].direction = self.body[i - 1].direction
+            self.body[i].direction = self.body[i + 1].direction
 
             if self.body[i].tile_type in (TileType.head, TileType.tail):
                 continue
