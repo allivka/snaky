@@ -56,8 +56,7 @@ class Game:
         exit()
 
     def control_process(self, key: int) -> None:
-
-        if pygame.time.get_ticks() - self.last_control_time >= self.config["control_time_gap"]: return
+        if pygame.time.get_ticks() - self.last_control_time < self.config["control_time_gap"]: return
 
         self.snake.direction = fix_degrees(self.snake.direction)
 
@@ -71,6 +70,7 @@ class Game:
         if key not in dirs: return
 
         if abs(fix_degrees(self.snake.direction) - dirs[key]) == 180: return
+
 
         self.snake.direction = dirs[key]
 
@@ -89,7 +89,6 @@ class Game:
         for event in events:
             match event.type:
                 case pygame.QUIT: self.quit()
-
                 case pygame.KEYDOWN:
                     self.keydown_process(event)
 
@@ -106,9 +105,9 @@ class Game:
 
             if pygame.time.get_ticks() - last_forward_time > self.config["move_update_gap"]:
                 self.snake.forward()
+                self.snake.update()
                 last_forward_time = pygame.time.get_ticks()
 
-            self.snake.update()
 
             self.surface.blit(self.field.surface, (0,0))
             self.surface.blit(self.apple.surface, self.apple.get_screen_pos())

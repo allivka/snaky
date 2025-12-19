@@ -68,18 +68,11 @@ class Snake:
             *[BodyTile(sprites, chunk_size, pos - angle_to_vec(direction) * (i + 1), centre_shift, TileType.straight, direction) for i in range(0, body_length - 2)],
             BodyTile(sprites, chunk_size, pos, centre_shift, TileType.head, direction)
             ]
+        self.direction = direction
         self.speed = speed
 
         self.update()
 
-
-    @property
-    def direction(self) -> int:
-        return self.body[-1].direction
-
-    @direction.setter
-    def direction(self, value: int) -> None:
-        self.body[-1].direction = value
 
     def update(self) -> None:
         self.direction = fix_degrees(self.direction)
@@ -90,33 +83,33 @@ class Snake:
         for tile in self.body:
             tile.entity.draw(sf, shift)
 
-    def forward(self) -> None:
-        speed: Vec2 = angle_to_vec(self.direction) * self.speed
+    def forward(self, direction: int | None = None) -> None:
 
-        for i in range(len(self.body) - 1):
-            d: int = self.body[i + 1].direction
+        if direction is None:
+            direction = self.direction
 
-            self.body[i].entity.pos += angle_to_vec(d) * self.speed
+        for _ in range(self.speed):
 
-            t = self.body[i].direction
-            self.body[i].direction = self.body[i + 1].direction
+            for i in range(1, len(self.body) - 1):
+                self.body[i].direction = fix_degrees(self.body[i + 1].direction)
+                self.body[i].entity.pos = self.body[i + 1].entity.pos
 
-            if self.body[i].tile_type in (TileType.head, TileType.tail):
-                continue
+            self.body[-1].direction = direction
+            self.body[-1].entity.pos = self.body[-1].entity.pos + angle_to_vec(self.body[-1].direction)
 
-            diff = fix_degrees(d) - fix_degrees(t)
 
-            if diff == 0:
-                self.body[i].tile_type = TileType.straight
-            elif diff > 0:
+        for i in range(1, len(self.body) - 1):
+
+            if self.body[i].tile_type.value in (TileType.head, TileType.tail): continue
+
+            diff: int = fix_degrees(self.body[i + 1].direction) - fix_degrees(self.body[i].direction)
+
+            if diff > 0:
                 self.body[i].tile_type = TileType.right
             elif diff < 0:
                 self.body[i].tile_type = TileType.left
+            elif diff == 0:
+                self.body[i].tile_type = TileType.straight
 
-
-
-        self.body[-1].entity.pos += speed
-
-
-
-
+        self.body[0].direction = fix_degrees(self.body[1].direction)
+        self.body[0].entity.pos = self.body[1].entity.pos - angle_to_vec(self.body[1].direction)
