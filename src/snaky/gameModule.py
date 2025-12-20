@@ -36,10 +36,10 @@ class Game:
         self.snake = snake.Snake(
             sprites=self.body_sprites,
             chunk_size=self.field.chunk_size,
-            pos=Vec2(2, 2),
+            pos=Vec2(config["start_pos"]),
             centre_shift = (config["snake_centre_shift_x"], config["snake_centre_shift_y"]),
-            direction=0,
-            body_length=4
+            direction=config["start_direction"],
+            body_length=config["start_length"]
         )
 
         self.last_control_time = pygame.time.get_ticks()

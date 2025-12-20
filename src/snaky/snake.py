@@ -33,7 +33,7 @@ class BodyTile:
         self.direction = direction
 
     def __str__(self) -> str:
-        return f"tile_type={self.tile_type}, direction={self.direction}\n\tentity={self.entity}\n\tsprites={self.sprites}"
+        return f"tile_type={self.tile_type}, direction={self.direction}\n\tentity={self.entity}\n"
 
     def update(self, t: Optional[TileType] = None) -> None:
         if not t is None: self.tile_type = t

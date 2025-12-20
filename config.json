@@ -19,5 +19,9 @@
   "snake_centre_shift_y": -0.0,
 
   "control_time_gap": 0,
-  "move_update_gap": 1000
+  "move_update_gap": 1000,
+
+  "start_length": 3,
+  "start_direction": 0,
+  "start_pos": [4, 3]
 }
