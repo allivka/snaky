@@ -14,18 +14,10 @@ def main(config_path: str = "config.json") -> None:
     pygame.display.set_icon(pygame.image.load(config["icon_path"]))
 
     clock: pygame.time.Clock = pygame.time.Clock()
-    i = 0
     while True:
         surface.blit(game.play(), (0, 0))
         pygame.display.update()
         clock.tick(config["tick_rate"])
-
-        if i % 60 == 0:
-            print(*game.snake.body)
-
-        i += 1
-
-
 
 
 
