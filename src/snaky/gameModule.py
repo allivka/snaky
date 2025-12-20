@@ -8,8 +8,6 @@ import snaky.snake as snake
 class Game:
 
     def __init__(self, config: Config) -> None:
-        pygame.init()
-
         if not pygame.image.get_extended():
             raise NotImplementedError()
 
@@ -18,9 +16,7 @@ class Game:
         chunk : pygame.Surface = pygame.image.load(config["map_chunk_path"])
         self.field = Map(Vec2(config["map_size_x"], config["map_size_y"]), chunk)
 
-        self.surface = pygame.display.set_mode(self.field.get_screen_size())
-        pygame.display.set_caption("Snaky")
-        pygame.display.set_icon(pygame.image.load(config["icon_path"]))
+        self.surface = pygame.Surface(self.field.get_screen_size())
 
         self.apple = Entity(
             surface=pygame.image.load(config["apple_path"]),
@@ -47,6 +43,7 @@ class Game:
         )
 
         self.last_control_time = pygame.time.get_ticks()
+        self.last_forward_time = pygame.time.get_ticks()
 
         self.paused = False
 
@@ -96,25 +93,17 @@ class Game:
                 case pygame.KEYDOWN:
                     self.keydown_process(event)
 
-    def play(self) -> None:
-        clock = pygame.time.Clock()
+    def play(self) -> pygame.Surface:
+        self.update_state(pygame.event.get())
 
-        last_forward_time: int = pygame.time.get_ticks()
-
-        while True:
-            self.update_state(pygame.event.get())
-
-            if pygame.time.get_ticks() - last_forward_time > self.config["move_update_gap"] and not self.paused:
-                self.snake.forward()
-                self.snake.update()
-                last_forward_time = pygame.time.get_ticks()
+        if pygame.time.get_ticks() - self.last_forward_time > self.config["move_update_gap"] and not self.paused:
+            self.snake.forward()
+            self.snake.update()
+            self.last_forward_time = pygame.time.get_ticks()
 
 
-            self.surface.blit(self.field.surface, (0,0))
-            self.surface.blit(self.apple.surface, self.apple.get_screen_pos())
-            self.snake.draw(self.surface)
+        self.surface.blit(self.field.surface, (0,0))
+        self.surface.blit(self.apple.surface, self.apple.get_screen_pos())
+        self.snake.draw(self.surface)
 
-            pygame.display.update()
-            clock.tick(self.config["tick_rate"])
-
-
+        return self.surface.copy()
