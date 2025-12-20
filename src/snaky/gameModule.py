@@ -43,10 +43,12 @@ class Game:
             pos=Vec2(2, 2),
             centre_shift = (config["snake_centre_shift_x"], config["snake_centre_shift_y"]),
             direction=0,
-            body_length=3
+            body_length=4
         )
 
         self.last_control_time = pygame.time.get_ticks()
+
+        self.paused = False
 
 
     def __str__(self) -> str:
@@ -69,21 +71,23 @@ class Game:
 
         if key not in dirs: return
 
-        if abs(fix_degrees(self.snake.direction) - dirs[key]) == 180: return
+        if angle_to_vec(self.snake.body[-1].direction) == -angle_to_vec(dirs[key]): return
 
 
         self.snake.direction = dirs[key]
 
         self.last_control_time = pygame.time.get_ticks()
 
+    def pause_process(self, key: int) -> None:
+        if key == pygame.K_SPACE:
+            self.paused = not self.paused
 
     def keydown_process(self, event: pygame.event.Event) -> None:
         if event.type != pygame.KEYDOWN:
             raise RuntimeError(None, "event passed for keydown processing doesn't have such type")
 
         self.control_process(event.key)
-
-
+        self.pause_process(event.key)
 
     def update_state(self, events: list[pygame.event.Event]) -> None:
         for event in events:
@@ -91,9 +95,6 @@ class Game:
                 case pygame.QUIT: self.quit()
                 case pygame.KEYDOWN:
                     self.keydown_process(event)
-
-
-
 
     def play(self) -> None:
         clock = pygame.time.Clock()
@@ -103,7 +104,7 @@ class Game:
         while True:
             self.update_state(pygame.event.get())
 
-            if pygame.time.get_ticks() - last_forward_time > self.config["move_update_gap"]:
+            if pygame.time.get_ticks() - last_forward_time > self.config["move_update_gap"] and not self.paused:
                 self.snake.forward()
                 self.snake.update()
                 last_forward_time = pygame.time.get_ticks()

@@ -18,6 +18,6 @@
   "snake_centre_shift_x": 0.0,
   "snake_centre_shift_y": -0.0,
 
-  "control_time_gap": 100,
+  "control_time_gap": 0,
   "move_update_gap": 1000
 }

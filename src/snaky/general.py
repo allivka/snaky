@@ -8,7 +8,8 @@ def angle_to_vec(angle: int) -> Vec2:
     return Vec2(cos(rad), sin(rad))
 
 def fix_degrees(angle: int) -> int:
-    return (360 + (angle % 360)) % 360
+    t: int = (angle + 180) % 360 - 180
+    return t if t != -180 else 180
 
 class Config(TypedDict):
     tick_rate: int

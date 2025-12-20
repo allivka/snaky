@@ -63,11 +63,13 @@ class Snake:
         if body_length < 3: body_length = 3
 
         self.sprites = sprites
+
         self.body = [
             BodyTile(sprites, chunk_size, pos - angle_to_vec(direction) * (body_length - 1), centre_shift, TileType.tail, direction),
             *[BodyTile(sprites, chunk_size, pos - angle_to_vec(direction) * (i + 1), centre_shift, TileType.straight, direction) for i in range(0, body_length - 2)],
             BodyTile(sprites, chunk_size, pos, centre_shift, TileType.head, direction)
-            ]
+        ]
+
         self.direction = direction
         self.speed = speed
 
@@ -102,7 +104,7 @@ class Snake:
 
             if self.body[i].tile_type.value in (TileType.head, TileType.tail): continue
 
-            diff: int = fix_degrees(self.body[i + 1].direction) - fix_degrees(self.body[i].direction)
+            diff: int = fix_degrees(fix_degrees(self.body[i + 1].direction) - fix_degrees(self.body[i].direction))
 
             if diff > 0:
                 self.body[i].tile_type = TileType.right
