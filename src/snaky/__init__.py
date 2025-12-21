@@ -11,9 +11,20 @@ def main(config_path: str = "config.json") -> None:
     pygame.display.set_caption("Snaky")
     pygame.display.set_icon(pygame.image.load(config["icon_path"]))
 
+    frame: pygame.Surface = pygame.display.get_surface()
+
     while True:
-        surface.blit(game.play(), (0, 0))
-        pygame.display.update()
+
+        try:
+            frame = game.play()
+        except SystemExit:
+            break
+        finally:
+            surface.blit(frame, (0, 0))
+            pygame.display.update()
+
+    pygame.quit()
+    exit(0)
 
 
 

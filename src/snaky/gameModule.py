@@ -1,9 +1,9 @@
+import pygame
 
 from .gameMap import *
 import snaky.snake as snake
 
 class Game:
-
     def __init__(self, config: Config) -> None:
         if not pygame.image.get_extended():
             raise NotImplementedError()
@@ -46,12 +46,12 @@ class Game:
 
         self.paused = False
 
-
     def __str__(self) -> str:
         return f"Snake game:\n\nconfiguration={self.config}\nfield={self.field}\napple={self.apple}\nsnake={self.snake}\nsurface={self.surface}\nbody_sprites={self.body_sprites}"
 
-    def quit(self) -> None:
-        exit()
+    @staticmethod
+    def quit() -> None:
+        raise SystemExit("Game session was quited")
 
     def control_process(self, key: int) -> None:
         if pygame.time.get_ticks() - self.last_control_time < self.config["control_time_gap"]: return
@@ -92,6 +92,18 @@ class Game:
                 case pygame.KEYDOWN:
                     self.keydown_process(event)
 
+    def menu_logic(self) -> None:
+        pass
+
+    def game_logic(self) -> None:
+        if not (pygame.time.get_ticks() - self.last_forward_time > self.config["move_update_gap"]):
+            return
+
+        self.snake.forward()
+        self.snake.update()
+
+        self.last_forward_time = pygame.time.get_ticks()
+
     def play(self) -> pygame.Surface:
 
         if pygame.time.get_ticks() - self.last_tick_time < 1000 / self.config["tick_rate"]:
@@ -99,11 +111,10 @@ class Game:
 
         self.update_state(pygame.event.get())
 
-        if pygame.time.get_ticks() - self.last_forward_time > self.config["move_update_gap"] and not self.paused:
-            self.snake.forward()
-            self.snake.update()
-            self.last_forward_time = pygame.time.get_ticks()
-
+        if self.paused:
+            self.menu_logic()
+        else:
+            self.game_logic()
 
         self.surface.blit(self.field.surface, (0,0))
         self.surface.blit(self.apple.surface, self.apple.get_screen_pos())
@@ -111,4 +122,4 @@ class Game:
 
         self.last_tick_time = pygame.time.get_ticks()
 
-        return self.surface.copy()
+        return self.surface
