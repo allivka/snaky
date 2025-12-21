@@ -1,7 +1,6 @@
 from .gameModule import *
 
 pygame.init()
-pygame.init()
 
 def run(config: Config) -> None:
 
@@ -24,5 +23,4 @@ def run(config: Config) -> None:
             pygame.display.update()
 
     pygame.quit()
-    exit(0)
 

@@ -1,5 +1,3 @@
-import pygame
-
 from .gameMap import *
 import snaky.snake as snake
 
@@ -54,7 +52,8 @@ class Game:
         raise SystemExit("Game session was quited")
 
     def control_process(self, key: int) -> None:
-        if pygame.time.get_ticks() - self.last_control_time < self.config["control_time_gap"]: return
+        if pygame.time.get_ticks() - self.last_control_time < self.config["control_time_gap"]:
+            return
 
         self.snake.direction = fix_degrees(self.snake.direction)
 
@@ -67,8 +66,8 @@ class Game:
 
         if key not in dirs: return
 
-        if angle_to_vec(self.snake.body[-1].direction) == -angle_to_vec(dirs[key]): return
-
+        if angle_to_vec(self.snake.body[-1].direction) == -angle_to_vec(dirs[key]):
+            return
 
         self.snake.direction = dirs[key]
 
@@ -96,7 +95,7 @@ class Game:
         pass
 
     def game_logic(self) -> None:
-        if not (pygame.time.get_ticks() - self.last_forward_time > self.config["move_update_gap"]):
+        if not pygame.time.get_ticks() - self.last_forward_time > self.config["move_update_gap"]:
             return
 
         self.snake.forward()

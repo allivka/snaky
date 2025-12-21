@@ -60,7 +60,8 @@ class Snake:
             speed: int = 1
             ) -> None:
 
-        if body_length < 3: body_length = 3
+        if body_length < 3:
+            body_length = 3
 
         self.sprites = sprites
 
@@ -102,7 +103,8 @@ class Snake:
 
         for i in range(1, len(self.body) - 1):
 
-            if self.body[i].tile_type.value in (TileType.head, TileType.tail): continue
+            if self.body[i].tile_type.value in (TileType.head, TileType.tail):
+                continue
 
             diff: int = fix_degrees(fix_degrees(self.body[i + 1].direction) - fix_degrees(self.body[i].direction))
 
