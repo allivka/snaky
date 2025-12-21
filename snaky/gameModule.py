@@ -34,7 +34,7 @@ class Game:
             sprites=self.body_sprites,
             chunk_size=self.field.chunk_size,
             pos=Vec2(config["start_pos"]),
-            centre_shift = (config["snake_centre_shift_x"], config["snake_centre_shift_y"]),
+            centre_shift = Ve(config["snake_centre_shift_x"], config["snake_centre_shift_y"]),
             direction=config["start_direction"],
             body_length=config["start_length"]
         )
@@ -46,6 +46,13 @@ class Game:
         self.last_tick_time = pygame.time.get_ticks()
 
         self.paused = False
+
+    def reset_game(self, config: Config = None) -> None:
+
+        if config is None:
+            config = self.config
+
+        self.__init__(config)
 
     def __str__(self) -> str:
         return f"Snake game:\n\nconfiguration={self.config}\nfield={self.field}\napple={self.apple}\nsnake={self.snake}\nsurface={self.surface}\nbody_sprites={self.body_sprites}"
