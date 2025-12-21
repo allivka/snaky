@@ -1,5 +1,6 @@
 from .gameMap import *
 import snaky.snake as snake
+import random
 
 class Game:
     def __init__(self, config: Config) -> None:
@@ -100,15 +101,17 @@ class Game:
         if not pygame.time.get_ticks() - self.last_forward_time > self.config["move_update_gap"]:
             return
 
-        if self.snake.body[-1].entity.pos == self.apple.pos:
-            # Eating apple
-            pass
+        ready_to_eat: bool = self.snake.head.entity.pos + angle_to_vec(self.snake.direction) == self.apple.pos
 
-        else:
-            # Going forward
-            self.snake.forward()
-            self.field.matrix.sync([(tile.entity.pos, True) for tile in self.snake.body])
-            self.snake.update()
+        if ready_to_eat:
+            self.snake.grow(1)
+
+        self.snake.forward()
+        self.field.matrix.sync([(tile.entity.pos, True) for tile in self.snake.body])
+        self.snake.update()
+
+        if ready_to_eat:
+            self.apple.pos = random.choice(list(filter(lambda v: bool(v[1]), self.field.matrix.unfold())))[0]
 
         self.last_forward_time = pygame.time.get_ticks()
 

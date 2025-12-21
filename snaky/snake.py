@@ -64,6 +64,8 @@ class Snake:
             body_length = 3
 
         self.sprites = sprites
+        self.chunk_size = chunk_size
+        self.centre_shift = centre_shift
 
         self.body = [
             BodyTile(sprites, chunk_size, pos - angle_to_vec(direction) * (body_length - 1), centre_shift, TileType.tail, direction),
@@ -76,6 +78,13 @@ class Snake:
 
         self.update()
 
+    @property
+    def head(self) -> BodyTile:
+        return self.body[-1]
+
+    @property
+    def tail(self) -> BodyTile:
+        return self.body[0]
 
     def update(self) -> None:
         self.direction = fix_degrees(self.direction)
@@ -117,3 +126,18 @@ class Snake:
 
         self.body[0].direction = fix_degrees(self.body[1].direction)
         self.body[0].entity.pos = self.body[1].entity.pos - angle_to_vec(self.body[1].direction)
+
+    def grow(self, length: int = 1) -> None:
+
+        tail: BodyTile = self.tail
+        self.tail.entity.pos -= angle_to_vec(self.tail.direction) * length
+
+        self.body = (
+            [self.tail] +
+            [BodyTile(self.sprites,
+                  self.chunk_size,
+                  tail.entity.pos - angle_to_vec(tail.direction) * (i + 1),
+                  self.centre_shift, TileType.straight, tail.direction) for i in range(0, length)] +
+            self.body[1:]
+        )
+
