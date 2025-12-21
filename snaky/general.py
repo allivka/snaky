@@ -43,6 +43,8 @@ class Config(TypedDict):
     start_direction: int
     start_pos: tuple[int, int]
 
+    gap_per_score: int
+
 class ResourceBank:
     def __init__(self, config: Config):
         self.map_chunk: pygame.Surface = pygame.image.load(config["map_chunk_path"])

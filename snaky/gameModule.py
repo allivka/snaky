@@ -34,7 +34,7 @@ class Game:
             sprites=self.body_sprites,
             chunk_size=self.field.chunk_size,
             pos=Vec2(config["start_pos"]),
-            centre_shift = Ve(config["snake_centre_shift_x"], config["snake_centre_shift_y"]),
+            centre_shift = (config["snake_centre_shift_x"], config["snake_centre_shift_y"]),
             direction=config["start_direction"],
             body_length=config["start_length"]
         )
@@ -45,14 +45,16 @@ class Game:
         self.last_forward_time = pygame.time.get_ticks()
         self.last_tick_time = pygame.time.get_ticks()
 
+        self.score = 0
+
         self.paused = False
 
-    def reset_game(self, config: Config = None) -> None:
+    def reset_game(self, config: Config | None = None) -> None:
 
         if config is None:
             config = self.config
 
-        self.__init__(config)
+        Game.__init__(self, config)
 
     def __str__(self) -> str:
         return f"Snake game:\n\nconfiguration={self.config}\nfield={self.field}\napple={self.apple}\nsnake={self.snake}\nsurface={self.surface}\nbody_sprites={self.body_sprites}"
@@ -105,7 +107,8 @@ class Game:
         pass
 
     def game_logic(self) -> None:
-        if not pygame.time.get_ticks() - self.last_forward_time > self.config["move_update_gap"]:
+        if not (pygame.time.get_ticks() - self.last_forward_time >
+                self.config["move_update_gap"] - self.config["gap_per_score"] * self.score):
             return
 
         ready_to_eat: bool = self.snake.head.entity.pos + angle_to_vec(self.snake.direction) == self.apple.pos
@@ -119,6 +122,7 @@ class Game:
 
         if ready_to_eat:
             self.apple.pos = random.choice(list(filter(lambda v: not bool(v[1]), self.field.matrix.unfold())))[0]
+            self.score += 1
 
         self.last_forward_time = pygame.time.get_ticks()
 

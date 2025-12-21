@@ -16,13 +16,18 @@ class MapMatrix:
         for point in points:
             self[point] = value
 
-    def clear(self, points: list[Vec2]) -> None:
-        for point in points:
-            self[point] = False
+    def clear(self, value: bool = False) -> None:
+        for i in range(int(self.size[0])):
+            for j in range(int(self.size[1])):
+                self.matrix[i][j] = value
 
-    def sync(self, points: list[tuple[Vec2, bool]]) -> None:
+    def set(self, points: list[tuple[Vec2, bool]]) -> None:
         for point in points:
             self[point[0]] = point[1]
+
+    def sync(self, points: list[tuple[Vec2, bool]], fill_value: bool = False) -> None:
+        self.clear(fill_value)
+        self.set(points)
 
     def unfold(self) -> list[tuple[Vec2, bool]]:
         result = []

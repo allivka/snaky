@@ -25,5 +25,7 @@
 
   "start_length": 3,
   "start_direction": 0,
-  "start_pos": [4, 3]
+  "start_pos": [4, 3],
+
+  "gap_per_score": 20
 }

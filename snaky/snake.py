@@ -14,8 +14,6 @@ class TileType(Enum):
 
 type BodySprites = dict[TileType, pygame.Surface]
 
-
-
 class BodyTile:
     def __init__(
             self,
