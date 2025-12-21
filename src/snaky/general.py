@@ -22,6 +22,7 @@ class Config(TypedDict):
     apple_path: str
     apple_centre_shift_x: float
     apple_centre_shift_y: float
+    apple_start_pos: tuple[int, int]
 
     snake_head_path: str
     snake_tail_path: str

@@ -1,4 +1,3 @@
-from xmlrpc.server import resolve_dotted_attribute
 
 from .gameMap import *
 import snaky.snake as snake
@@ -19,10 +18,10 @@ class Game:
 
         self.apple = Entity(
             surface=self.bank.apple,
-            pos=Vec2(self.field.size[0] // 2, self.field.size[1] // 2),
+            pos=Vec2(config["apple_start_pos"]),
             chunk_size=self.field.chunk_size,
             centre_shift=(config["apple_centre_shift_x"], config["apple_centre_shift_y"])
-       )
+        )
 
         self.body_sprites = {
             snake.TileType.head: self.bank.snake_head,
@@ -111,4 +110,5 @@ class Game:
         self.snake.draw(self.surface)
 
         self.last_tick_time = pygame.time.get_ticks()
+
         return self.surface.copy()
