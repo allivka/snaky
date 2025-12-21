@@ -38,6 +38,8 @@ class Game:
             body_length=config["start_length"]
         )
 
+        self.field.matrix.sync([(tile.entity.pos, True) for tile in self.snake.body])
+
         self.last_control_time = pygame.time.get_ticks()
         self.last_forward_time = pygame.time.get_ticks()
         self.last_tick_time = pygame.time.get_ticks()
@@ -98,8 +100,15 @@ class Game:
         if not pygame.time.get_ticks() - self.last_forward_time > self.config["move_update_gap"]:
             return
 
-        self.snake.forward()
-        self.snake.update()
+        if self.snake.body[-1].entity.pos == self.apple.pos:
+            # Eating apple
+            pass
+
+        else:
+            # Going forward
+            self.snake.forward()
+            self.field.matrix.sync([(tile.entity.pos, True) for tile in self.snake.body])
+            self.snake.update()
 
         self.last_forward_time = pygame.time.get_ticks()
 
