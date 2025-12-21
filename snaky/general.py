@@ -14,6 +14,7 @@ def fix_degrees(angle: int) -> int:
 class Config(TypedDict):
     tick_rate: int
     icon_path: str
+    caption: str
 
     map_chunk_path: str
     map_size_x: int
