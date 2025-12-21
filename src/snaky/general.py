@@ -38,6 +38,18 @@ class Config(TypedDict):
     start_direction: int
     start_pos: tuple[int, int]
 
+class ResourceBank:
+    def __init__(self, config: Config):
+        self.map_chunk: pygame.Surface = pygame.image.load(config["map_chunk_path"])
+
+        self.apple: pygame.Surface = pygame.image.load(config["apple_path"])
+
+        self.snake_head: pygame.Surface = pygame.image.load(config["snake_head_path"])
+        self.snake_tail: pygame.Surface = pygame.image.load(config["snake_tail_path"])
+        self.snake_body_straight: pygame.Surface = pygame.image.load(config["snake_body_straight_path"])
+        self.snake_body_blended_right: pygame.Surface = pygame.image.load(config["snake_body_blended_right_path"])
+        self.snake_body_blended_left: pygame.Surface = pygame.transform.flip(self.snake_body_blended_right, True, False)
+
 class Entity:
 
     def __init__(self, surface: pygame.Surface, chunk_size: Vec2, pos: Vec2 = (0, 0), centre_shift: tuple[float, float] = (0.0, 0.0)) -> None:

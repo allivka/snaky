@@ -1,6 +1,4 @@
-from argparse import ArgumentError
-
-import pygame
+from xmlrpc.server import resolve_dotted_attribute
 
 from .gameMap import *
 import snaky.snake as snake
@@ -12,25 +10,26 @@ class Game:
             raise NotImplementedError()
 
         self.config = config
+        self.bank = ResourceBank(config)
 
-        chunk : pygame.Surface = pygame.image.load(config["map_chunk_path"])
+        chunk : pygame.Surface = self.bank.map_chunk
         self.field = Map(Vec2(config["map_size_x"], config["map_size_y"]), chunk)
 
         self.surface = pygame.Surface(self.field.get_screen_size())
 
         self.apple = Entity(
-            surface=pygame.image.load(config["apple_path"]),
+            surface=self.bank.apple,
             pos=Vec2(self.field.size[0] // 2, self.field.size[1] // 2),
             chunk_size=self.field.chunk_size,
             centre_shift=(config["apple_centre_shift_x"], config["apple_centre_shift_y"])
        )
 
         self.body_sprites = {
-            snake.TileType.head: pygame.image.load(config["snake_head_path"]),
-            snake.TileType.tail: pygame.image.load(config["snake_tail_path"]),
-            snake.TileType.straight: pygame.image.load(config["snake_body_straight_path"]),
-            snake.TileType.right: pygame.image.load(config["snake_body_blended_right_path"]),
-            snake.TileType.left: pygame.transform.flip(pygame.image.load(config["snake_body_blended_right_path"]), flip_x=True, flip_y=False)
+            snake.TileType.head: self.bank.snake_head,
+            snake.TileType.tail: self.bank.snake_tail,
+            snake.TileType.straight: self.bank.snake_body_straight,
+            snake.TileType.right: self.bank.snake_body_blended_right,
+            snake.TileType.left: self.bank.snake_body_blended_left,
         }
 
         self.snake = snake.Snake(
@@ -44,6 +43,7 @@ class Game:
 
         self.last_control_time = pygame.time.get_ticks()
         self.last_forward_time = pygame.time.get_ticks()
+        self.last_tick_time = pygame.time.get_ticks()
 
         self.paused = False
 
@@ -94,6 +94,10 @@ class Game:
                     self.keydown_process(event)
 
     def play(self) -> pygame.Surface:
+
+        if pygame.time.get_ticks() - self.last_tick_time < 1000 / self.config["tick_rate"]:
+            return self.surface.copy()
+
         self.update_state(pygame.event.get())
 
         if pygame.time.get_ticks() - self.last_forward_time > self.config["move_update_gap"] and not self.paused:
@@ -106,4 +110,5 @@ class Game:
         self.surface.blit(self.apple.surface, self.apple.get_screen_pos())
         self.snake.draw(self.surface)
 
+        self.last_tick_time = pygame.time.get_ticks()
         return self.surface.copy()
