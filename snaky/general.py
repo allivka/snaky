@@ -1,3 +1,6 @@
+
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 from typing import TypedDict
 from pygame.math import Vector2 as Vec2
