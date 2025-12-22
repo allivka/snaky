@@ -22,10 +22,11 @@
 
   "control_time_gap": 0,
   "move_update_gap": 700,
+  "min_move_update_gap": 300,
+  "gap_per_score": 30,
 
   "start_length": 3,
   "start_direction": 0,
-  "start_pos": [4, 3],
+  "start_pos": [4, 3]
 
-  "gap_per_score": 20
 }

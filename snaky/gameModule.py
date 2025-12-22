@@ -2,6 +2,11 @@ from .gameMap import *
 import snaky.snake as snake
 import random
 
+class SnakyQuit(SnakyException):
+    """Exception raised when the snake game session was quited"""
+class SnakyRestart(SnakyException):
+    """Exception raised when the snake game session was restarted"""
+
 class Game:
     def __init__(self, config: Config) -> None:
         if not pygame.image.get_extended():
@@ -48,8 +53,9 @@ class Game:
         self.score = 0
 
         self.paused = False
+        self.game_over = False
 
-    def reset_game(self, config: Config | None = None) -> None:
+    def restart_game(self, config: Config | None = None) -> None:
 
         if config is None:
             config = self.config
@@ -61,7 +67,11 @@ class Game:
 
     @staticmethod
     def quit() -> None:
-        raise SystemExit("Game session was quited")
+        raise SnakyQuit("Snaky game session was quited")
+
+    @staticmethod
+    def restart() -> None:
+        raise SnakyRestart
 
     def control_process(self, key: int) -> None:
         if pygame.time.get_ticks() - self.last_control_time < self.config["control_time_gap"]:
@@ -89,12 +99,17 @@ class Game:
         if key == pygame.K_SPACE:
             self.paused = not self.paused
 
+    def restart_process(self, key: int) -> None:
+        if key == pygame.K_r:
+            self.restart()
+
     def keydown_process(self, event: pygame.event.Event) -> None:
         if event.type != pygame.KEYDOWN:
             raise RuntimeError(None, "event passed for keydown processing doesn't have such type")
 
         self.control_process(event.key)
         self.pause_process(event.key)
+        self.restart_process(event.key)
 
     def update_state(self, events: list[pygame.event.Event]) -> None:
         for event in events:
@@ -103,12 +118,9 @@ class Game:
                 case pygame.KEYDOWN:
                     self.keydown_process(event)
 
-    def menu_logic(self) -> None:
-        pass
-
     def game_logic(self) -> None:
         if not (pygame.time.get_ticks() - self.last_forward_time >
-                self.config["move_update_gap"] - self.config["gap_per_score"] * self.score):
+                max(self.config["min_move_update_gap"], self.config["move_update_gap"] - self.config["gap_per_score"] * self.score)) or self.paused:
             return
 
         ready_to_eat: bool = self.snake.head.entity.pos + angle_to_vec(self.snake.direction) == self.apple.pos
@@ -117,8 +129,11 @@ class Game:
             self.snake.grow(1)
 
         self.snake.forward()
-        self.field.matrix.sync([(tile.entity.pos, True) for tile in self.snake.body])
         self.snake.update()
+        self.field.matrix.sync([(tile.entity.pos, True) for tile in self.snake.body if tile.tile_type != snake.TileType.head])
+
+        if self.field.matrix[self.snake.head.entity.pos]:
+            self.game_over = True
 
         if ready_to_eat:
             self.apple.pos = random.choice(list(filter(lambda v: not bool(v[1]), self.field.matrix.unfold())))[0]
@@ -129,14 +144,13 @@ class Game:
     def play(self) -> pygame.Surface:
 
         if pygame.time.get_ticks() - self.last_tick_time < 1000 / self.config["tick_rate"]:
-            return self.surface.copy()
+            return self.surface
 
-        self.update_state(pygame.event.get())
-
-        if self.paused:
-            self.menu_logic()
-        else:
+        try:
+            self.update_state(pygame.event.get())
             self.game_logic()
+        except SnakyRestart:
+            self.restart_game()
 
         self.surface.blit(self.field.surface, (0,0))
         self.surface.blit(self.apple.surface, self.apple.get_screen_pos())

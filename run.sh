@@ -1,3 +1,3 @@
 #!/bin/sh
 poetry install
-poetry run python snaky
+PYGAME_HIDE_SUPPORT_PROMPT='hide' poetry run python snaky

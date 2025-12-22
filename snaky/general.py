@@ -1,10 +1,10 @@
-
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 from typing import TypedDict
 from pygame.math import Vector2 as Vec2
 from math import radians, sin, cos
+
+class SnakyException(Exception):
+    """Base exception for all snaky exceptions"""
 
 def angle_to_vec(angle: int) -> Vec2:
     rad = radians(angle)
@@ -38,12 +38,13 @@ class Config(TypedDict):
 
     control_time_gap: int
     move_update_gap: int
+    min_move_update_gap: int
+    gap_per_score: int
 
     start_length: int
     start_direction: int
     start_pos: tuple[int, int]
 
-    gap_per_score: int
 
 class ResourceBank:
     def __init__(self, config: Config):

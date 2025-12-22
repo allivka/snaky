@@ -4,13 +4,24 @@ from .general import *
 class MapMatrix:
     def __init__(self, size: Vec2) -> None:
         self.size = size
-        self.matrix = [[False for _ in range(int(size[1]))] for _ in range(int(size[0]))]
+        self._matrix = [[False for _ in range(int(size[1]))] for _ in range(int(size[0]))]
+
+    def is_valid_pos(self, pos: Vec2) -> bool:
+        return 0 <= pos.x < self.size.x and 0 <= pos.y < self.size.y
+
+    def validate_pos(self, pos: Vec2) -> bool:
+        if not self.is_valid_pos(pos):
+            raise IndexError("Position out of matrix bounds")
+
+        return True
 
     def __getitem__(self, pos: Vec2) -> bool:
-        return self.matrix[int(pos.x)][int(pos.y)]
+        self.validate_pos(pos)
+        return self._matrix[int(pos.x)][int(pos.y)]
 
     def __setitem__(self, pos: Vec2, val: bool) -> None:
-        self.matrix[int(pos.x)][int(pos.y)] = val
+        self.validate_pos(pos)
+        self._matrix[int(pos.x)][int(pos.y)] = val
 
     def fill(self, points: list[Vec2], value: bool = True) -> None:
         for point in points:
@@ -19,7 +30,7 @@ class MapMatrix:
     def clear(self, value: bool = False) -> None:
         for i in range(int(self.size[0])):
             for j in range(int(self.size[1])):
-                self.matrix[i][j] = value
+                self._matrix[i][j] = value
 
     def set(self, points: list[tuple[Vec2, bool]]) -> None:
         for point in points:
@@ -33,7 +44,7 @@ class MapMatrix:
         result = []
 
         for x in range(int(self.size[0])):
-            result += [(Vec2(x, y), self.matrix[x][y]) for y in range(int(self.size[1]))]
+            result += [(Vec2(x, y), self._matrix[x][y]) for y in range(int(self.size[1]))]
 
         return result
 

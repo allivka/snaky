@@ -16,9 +16,10 @@ def run(config: Config) -> None:
 
         try:
             frame = game.play()
-        except SystemExit:
+        except SnakyException as exception:
+            print(exception)
             break
-        finally:
+        else:
             surface.blit(frame, (0, 0))
             pygame.display.update()
 
