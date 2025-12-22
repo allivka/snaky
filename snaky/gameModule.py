@@ -139,7 +139,7 @@ class Game:
             self.game_over = True
 
         if ready_to_eat:
-            self.apple.pos = random.choice(list(filter(lambda v: not bool(v[1]), self.field.matrix.unfold())))[0]
+            self.apple.pos = random.choice(list(filter(lambda v: not bool(v[1]) and v[0] != self.apple.pos, self.field.matrix.unfold())))[0]
             self.score += 1
 
         self.last_forward_time = pygame.time.get_ticks()
