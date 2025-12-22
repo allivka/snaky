@@ -7,7 +7,7 @@ class MapMatrix:
         self._matrix = [[False for _ in range(int(size[1]))] for _ in range(int(size[0]))]
 
     def is_valid_pos(self, pos: Vec2) -> bool:
-        return 0 <= pos.x < self.size.x and 0 <= pos.y < self.size.y
+        return bool(0 <= pos.x < self.size.x and 0 <= pos.y < self.size.y)
 
     def validate_pos(self, pos: Vec2) -> bool:
         if not self.is_valid_pos(pos):

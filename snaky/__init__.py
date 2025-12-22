@@ -10,12 +10,10 @@ def run(config: Config) -> None:
     pygame.display.set_caption(config["caption"])
     pygame.display.set_icon(pygame.image.load(config["icon_path"]))
 
-    frame: pygame.Surface = pygame.display.get_surface()
-
-    while True:
+    while not game.game_over:
 
         try:
-            frame = game.play()
+            frame: pygame.Surface = game.play()
         except SnakyException as exception:
             print(exception)
             break

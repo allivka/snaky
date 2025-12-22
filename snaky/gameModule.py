@@ -7,6 +7,9 @@ class SnakyQuit(SnakyException):
 class SnakyRestart(SnakyException):
     """Exception raised when the snake game session was restarted"""
 
+class SnakyGameOver(SnakyQuit):
+    """Exception raised when attempted to play while game is over"""
+
 class Game:
     def __init__(self, config: Config) -> None:
         if not pygame.image.get_extended():
@@ -132,7 +135,7 @@ class Game:
         self.snake.update()
         self.field.matrix.sync([(tile.entity.pos, True) for tile in self.snake.body if tile.tile_type != snake.TileType.head])
 
-        if self.field.matrix[self.snake.head.entity.pos]:
+        if not self.field.matrix.is_valid_pos(self.snake.head.entity.pos) or self.field.matrix[self.snake.head.entity.pos]:
             self.game_over = True
 
         if ready_to_eat:
@@ -142,6 +145,9 @@ class Game:
         self.last_forward_time = pygame.time.get_ticks()
 
     def play(self) -> pygame.Surface:
+
+        if self.game_over:
+            raise SnakyGameOver("Game was already finished. Cannot continue playing")
 
         if pygame.time.get_ticks() - self.last_tick_time < 1000 / self.config["tick_rate"]:
             return self.surface
