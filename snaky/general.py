@@ -15,6 +15,14 @@ def fix_degrees(angle: int) -> int:
     return t if t != -180 else 180
 
 class Config(TypedDict):
+
+    stats_reserved_width: int
+    stats_border_width: int
+    stats_text_shift: tuple[int, int]
+
+    font: str
+    font_size: int
+
     tick_rate: int
     icon_path: str
     caption: str

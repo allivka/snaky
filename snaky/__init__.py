@@ -1,6 +1,5 @@
 from .gameModule import *
-import app
+import snaky.menu as menu
+import snaky.stats as stats
 
 pygame.init()
-
-

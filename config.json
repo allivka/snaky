@@ -1,4 +1,11 @@
 {
+  "stats_reserved_width": 200,
+  "stats_border_width": 10,
+  "stats_text_shift": [10, 10],
+
+  "font": "arial",
+  "font_size": 30,
+
   "tick_rate": 60,
   "icon_path": "resources/textures/apple.png",
   "caption": "Snaky",
