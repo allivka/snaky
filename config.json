@@ -1,12 +1,24 @@
 {
-
-  "target_score": -1,
-
   "records_path": "records.json",
 
+  "map_size_x" : 8,
+  "map_size_y": 6,
+
+  "control_time_gap": 0,
+  "move_update_gap": 700,
+  "min_move_update_gap": 200,
+  "gap_per_score": 30,
+
+  "start_length": 3,
+  "start_direction": 0,
+  "start_pos": [4, 3],
+
+  "target_score": -1,
   "stats_reserved_width": 300,
   "stats_border_width": 10,
   "stats_text_shift": [10, 10],
+
+
 
   "font": "arial",
   "font_size": 30,
@@ -16,8 +28,6 @@
   "caption": "Snaky",
 
   "map_chunk_path" : "resources/textures/field.png",
-  "map_size_x" : 8,
-  "map_size_y": 6,
 
   "apple_path": "resources/textures/apple.png",
   "apple_centre_shift_x": 0.0,
@@ -30,15 +40,6 @@
   "snake_body_blended_right_path": "resources/textures/snake_body_blended_right.png",
 
   "snake_centre_shift_x": 0.0,
-  "snake_centre_shift_y": -0.0,
-
-  "control_time_gap": 0,
-  "move_update_gap": 700,
-  "min_move_update_gap": 200,
-  "gap_per_score": 30,
-
-  "start_length": 3,
-  "start_direction": 0,
-  "start_pos": [4, 3]
+  "snake_centre_shift_y": -0.0
 
 }
