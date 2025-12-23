@@ -1,4 +1,6 @@
 {
+  "record_path": "record.json",
+
   "stats_reserved_width": 200,
   "stats_border_width": 10,
   "stats_text_shift": [10, 10],

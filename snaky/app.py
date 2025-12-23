@@ -1,8 +1,11 @@
+import json
+
 from snaky import *
 
 def run(config: Config) -> None:
 
     game: Game = Game(config)
+    record: dict[str, int] = json.load(open(config["record_path"]))
 
     surface: pygame.Surface = pygame.display.set_mode(game.surface.get_size() + Vec2(config["stats_reserved_width"], 0))
     pygame.display.set_caption(config["caption"])
@@ -20,6 +23,7 @@ def run(config: Config) -> None:
     clock: pygame.time.Clock = pygame.time.Clock()
 
     while not game.game_over:
+
         try:
             frame: pygame.Surface = game.play()
         except SnakyException as exception:
@@ -28,7 +32,10 @@ def run(config: Config) -> None:
         else:
             surface.blit(frame, (0, 0))
 
-        info.update(score=game.score)
+        if game.score > record["record"]:
+            record["record"] = game.score
+
+        info.update(score=game.score, record=record["record"])
         pygame.draw.rect(surface, color=(89, 193, 53),
                          rect=pygame.Rect(info.shift.x - config["stats_border_width"],
                                           info.shift.y - config["stats_border_width"],
@@ -46,4 +53,5 @@ def run(config: Config) -> None:
         pygame.display.update()
         clock.tick(config["tick_rate"])
 
+    json.dump(record, open(config["record_path"], "w"))
     pygame.quit()
