@@ -85,10 +85,10 @@ def run(config: Config) -> None:
 
             info.draw(surface)
 
-            if game.paused or game.game_over:
+            if game.paused or game.game_over or game.victory:
                 menu.draw(
                     surface,
-                    msg="Game over :(" if game.game_over else "Paused",
+                    msg="Game over :(" if game.game_over else "VICTORY!!! :)" if game.victory else "Paused",
                     score=game.score,
                     record=records[current_record_name],
                     info_lines=["Press Space to continue", "Press R to restart"]

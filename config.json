@@ -1,4 +1,7 @@
 {
+
+  "target_score": -1,
+
   "records_path": "records.json",
 
   "stats_reserved_width": 300,

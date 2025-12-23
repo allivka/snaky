@@ -13,7 +13,7 @@ class SnakyGameOver(SnakyQuit):
 class Game:
     def __init__(self, config: Config) -> None:
         if not pygame.image.get_extended():
-            raise NotImplementedError()
+            raise NotImplementedError("Current machine doesn't support png image format")
 
         self.config = config
         self.bank = ResourceBank(config)
@@ -54,9 +54,11 @@ class Game:
         self.last_tick_time = pygame.time.get_ticks()
 
         self.score = 0
+        self.target_score = (t:=self.field.size)[0] * t[1] - config["start_length"] if config["target_score"] <= 0 else config["target_score"]
 
         self.paused = False
         self.game_over = False
+        self.victory = False
 
     def restart_game(self, config: Config | None = None) -> None:
 
@@ -124,7 +126,7 @@ class Game:
     def game_logic(self) -> None:
         if not (pygame.time.get_ticks() - self.last_forward_time >
                 max(
-                    self.config["min_move_update_gap"],self.config["move_update_gap"] - self.config["gap_per_score"] * self.score)) or self.paused or self.game_over:
+                    self.config["min_move_update_gap"],self.config["move_update_gap"] - self.config["gap_per_score"] * self.score)) or self.paused or self.game_over or self.victory:
             return
 
         ready_to_eat: bool = self.snake.head.entity.pos + angle_to_vec(self.snake.direction) == self.apple.pos
@@ -142,6 +144,9 @@ class Game:
         if ready_to_eat:
             self.apple.pos = random.choice(list(filter(lambda v: not bool(v[1]) and v[0] != self.apple.pos, self.field.matrix.unfold())))[0]
             self.score += 1
+
+        if self.score >= self.target_score:
+            self.victory = True
 
         self.last_forward_time = pygame.time.get_ticks()
 
