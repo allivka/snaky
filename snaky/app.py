@@ -1,9 +1,18 @@
 import json
+import os.path
 from snaky import *
+
+def ensure_json(path: str) -> None:
+    if not os.path.isfile(path):
+        with open(path, "w") as f:
+            json.dump({}, f)
+
 
 def run(config: Config) -> None:
 
     game: Game = Game(config)
+
+    ensure_json(config["records_path"])
 
     with open(config["records_path"]) as r:
         records: dict = json.load(r)
@@ -22,7 +31,7 @@ def run(config: Config) -> None:
     info: stats.Stats = stats.Stats(
         font,
         text_color=pygame.Color((255, 213, 65)),
-        padding=Vec2(0, 100),
+        padding=Vec2(0, 50),
         shift=Vec2(game.field.get_screen_size().x + config["stats_border_width"], config["stats_border_width"]),
         text_shift=Vec2(config["stats_text_shift"]),
         current_record_name=current_record_name,
