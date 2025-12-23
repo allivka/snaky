@@ -16,7 +16,7 @@ def fix_degrees(angle: int) -> int:
 
 class Config(TypedDict):
 
-    record_path: str
+    records_path: str
 
     stats_reserved_width: int
     stats_border_width: int

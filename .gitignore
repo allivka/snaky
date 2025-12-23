@@ -1,3 +1,4 @@
 .idea
 snaky/__pycache__
 .venv
+records.json

@@ -1,7 +1,7 @@
 {
-  "record_path": "record.json",
+  "records_path": "records.json",
 
-  "stats_reserved_width": 200,
+  "stats_reserved_width": 300,
   "stats_border_width": 10,
   "stats_text_shift": [10, 10],
 
@@ -13,8 +13,8 @@
   "caption": "Snaky",
 
   "map_chunk_path" : "resources/textures/field.png",
-  "map_size_x" : 6,
-  "map_size_y": 6,
+  "map_size_x" : 8,
+  "map_size_y": 8,
 
   "apple_path": "resources/textures/apple.png",
   "apple_centre_shift_x": 0.0,
