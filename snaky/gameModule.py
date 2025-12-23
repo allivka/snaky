@@ -123,7 +123,8 @@ class Game:
 
     def game_logic(self) -> None:
         if not (pygame.time.get_ticks() - self.last_forward_time >
-                max(self.config["min_move_update_gap"], self.config["move_update_gap"] - self.config["gap_per_score"] * self.score)) or self.paused:
+                max(
+                    self.config["min_move_update_gap"],self.config["move_update_gap"] - self.config["gap_per_score"] * self.score)) or self.paused or self.game_over:
             return
 
         ready_to_eat: bool = self.snake.head.entity.pos + angle_to_vec(self.snake.direction) == self.apple.pos
@@ -145,9 +146,6 @@ class Game:
         self.last_forward_time = pygame.time.get_ticks()
 
     def play(self) -> pygame.Surface:
-
-        if self.game_over:
-            raise SnakyGameOver("Game was already finished. Cannot continue playing")
 
         if pygame.time.get_ticks() - self.last_tick_time < 1000 / self.config["tick_rate"]:
             return self.surface

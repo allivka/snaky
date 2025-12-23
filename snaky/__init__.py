@@ -1,5 +1,5 @@
 from .gameModule import *
-import snaky.menu as menu
+import snaky.menuModule as menuModule
 import snaky.stats as stats
 
 pygame.init()

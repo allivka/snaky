@@ -1,15 +1,16 @@
 from .general import *
 
 class Stats:
-    def __init__(self,
-                 font: pygame.font.Font, *,
-                 text_color: pygame.Color,
-                 current_record_name: str,
-                 other_records: dict[str, int],
-                 padding: Vec2 = Vec2(),
-                 shift: Vec2 = Vec2(),
-                 text_shift: Vec2 = Vec2(),
-                 ) -> None:
+    def __init__(
+            self,
+            font: pygame.font.Font, *,
+            text_color: pygame.Color,
+            current_record_name: str,
+            other_records: dict[str, int],
+            padding: Vec2 = Vec2(),
+            shift: Vec2 = Vec2(),
+            text_shift: Vec2 = Vec2(),
+            ) -> None:
 
         self.font = font
         self.text_color = text_color

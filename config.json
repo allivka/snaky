@@ -14,7 +14,7 @@
 
   "map_chunk_path" : "resources/textures/field.png",
   "map_size_x" : 8,
-  "map_size_y": 8,
+  "map_size_y": 6,
 
   "apple_path": "resources/textures/apple.png",
   "apple_centre_shift_x": 0.0,
@@ -31,7 +31,7 @@
 
   "control_time_gap": 0,
   "move_update_gap": 700,
-  "min_move_update_gap": 300,
+  "min_move_update_gap": 200,
   "gap_per_score": 30,
 
   "start_length": 3,

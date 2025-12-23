@@ -132,10 +132,12 @@ class Snake:
 
         self.body = (
             [self.tail] +
-            [BodyTile(self.sprites,
-                  self.chunk_size,
-                  tail.entity.pos - angle_to_vec(tail.direction) * (i + 1),
-                  self.centre_shift, TileType.straight, tail.direction) for i in range(0, length)] +
+            [
+                BodyTile(self.sprites,
+                self.chunk_size,
+                tail.entity.pos - angle_to_vec(tail.direction) * (i + 1),
+                self.centre_shift, TileType.straight, tail.direction) for i in range(0, length)
+            ] +
             self.body[1:]
         )
 
